@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿/*Project: Sharp386
+ * Date Started: February 7, 2018
+ * Copyright (C) 2018 Muzaffar Auhammud - All Rights Reserved
+ * You may use, distribute, and modify this code under the
+ * terms of the Apache 2.0 License
+ */
+
+using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -103,12 +107,12 @@ namespace Sharp386
             return value;
         }
 
-        public void WriteByte(UInt32 address, byte data)
+        void WriteByte(UInt32 address, byte data)
         {
             RAM[address] = data;
         }
 
-        public void WriteWord(UInt32 address, UInt16 data)
+        void WriteWord(UInt32 address, UInt16 data)
         {
             TempByte = (byte)(data & 0x00FF);
             WriteByte(address, TempByte);
@@ -117,7 +121,7 @@ namespace Sharp386
             WriteByte(address + 1, TempByte);
         }
 
-        public void WriteDword(UInt32 address, UInt32 data)
+        void WriteDword(UInt32 address, UInt32 data)
         {
             TempByte = (byte)(data & 0x000000FF);
             WriteByte(address, TempByte);
@@ -134,11 +138,6 @@ namespace Sharp386
 
         public Sharp386()
         {
-            //for (int i = 0; i < RAM.Length; i++)
-            //{
-            //    RAM[i] = 0x90;
-            //}
-
             Timer = new System.Timers.Timer(1000);
             Timer.Elapsed += (t, e) =>
               {
@@ -163,6 +162,16 @@ namespace Sharp386
 
             ESI = 0;
             EDI = 0;
+        }
+
+        public void Load(string filename)
+        {
+            byte[] program = System.IO.File.ReadAllBytes(filename);
+
+            for (UInt32 i = 0; i < program.Length; i++)
+            {
+                WriteByte(i, program[i]);
+            }
         }
 
         public void Start()
