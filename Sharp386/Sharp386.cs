@@ -344,102 +344,104 @@ namespace Sharp386
                 case 0x66:
                     break;
 
-                //MOV r8, [imm16]/[imm32]
+                #region "MOV r8, m16/m32
+
+                //MOV r8, m16/m32
                 case 0x8A:
                     switch (ReadByte())
                     {
-                        //MOV CL, [imm32]
+                        //MOV CL, m32
                         case 0x0D:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             ECX = ECX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV CL, [imm16]
+                        //MOV CL, m16
                         case 0x0E:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             ECX = ECX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV DL, [imm32]
+                        //MOV DL, m32
                         case 0x15:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             EDX = EDX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV DL, [imm16]
+                        //MOV DL, m16
                         case 0x16:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             EDX = EDX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV BL, [imm32]
+                        //MOV BL, m32
                         case 0x1D:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV BL, [imm16]
+                        //MOV BL, m16
                         case 0x1E:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV AH, [imm32]
+                        //MOV AH, m32
                         case 0x25:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV AH, [imm16]
+                        //MOV AH, m16
                         case 0x26:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV CH, [imm32]
+                        //MOV CH, m32
                         case 0x2D:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             ECX = ECX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV CH, [imm16]
+                        //MOV CH, m16
                         case 0x2E:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             ECX = ECX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV DH, [imm32]
+                        //MOV DH, m32
                         case 0x35:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             EDX = EDX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV DH, [imm16]
+                        //MOV DH, m16
                         case 0x36:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
                             EDX = EDX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV BH, [imm32]
+                        //MOV BH, m32
                         case 0x3D:
                             MAR = ReadDword();
                             TempByte = RAM[MAR];
                             EBX = EBX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
-                        //MOV BH, [imm16]
+                        //MOV BH, m16
                         case 0x3E:
                             MAR = ReadWord();
                             TempByte = RAM[MAR];
@@ -448,65 +450,133 @@ namespace Sharp386
                     }
                     break;
 
-                //MOV r16, [imm16]
+                #endregion
+
+                #region "MOV r16/r32, m16/m32"
+
+                //MOV r16, m16/m32
                 case 0x8B:
                     switch (ReadByte())
                     {
-                        //MOV CX, [imm32]
+                        //MOV ECX, m32
                         case 0x0D:
-                            MAR = ReadDword();
-                            TempWord = ReadWord(MAR);
-                            ECX = ECX & (0xFFFF0000) | TempWord;
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadDword();
+                                TempDword = ReadDword(MAR);
+                                ECX = TempDword;
+                            }
+                            //MOV CX, m32
+                            else
+                            {
+                                MAR = ReadDword();
+                                TempWord = ReadWord(MAR);
+                                ECX = ECX & (0xFFFF0000) | TempWord;
+                            }
                             break;
 
-                        //MOV CX, [imm16]
+                        //MOV CX, m16
                         case 0x0E:
-                            MAR = ReadWord();
-                            TempWord = ReadWord(MAR);
-                            ECX = ECX & (0xFFFF0000) | TempWord;
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadWord();
+                                TempWord = ReadWord(MAR);
+                                ECX = ECX & (0xFFFF0000) | TempWord;
+                            }
+                            //MOV ECX, m16
+                            else
+                            {
+                                MAR = ReadWord();
+                                TempDword = ReadDword(MAR);
+                                ECX = TempDword;
+                            }
                             break;
 
-                        //MOV DX, [imm32]
+                        //MOV EDX, m32
                         case 0x15:
-                            MAR = ReadDword();
-                            TempWord = ReadWord(MAR);
-                            EDX = EDX & (0xFFFF0000) | TempWord;
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadDword();
+                                TempDword = ReadDword(MAR);
+                                EDX = TempDword;
+                            }
+                            //MOV DX, m32
+                            else
+                            {
+                                MAR = ReadDword();
+                                TempWord = ReadWord(MAR);
+                                EDX = EDX & (0xFFFF0000) | TempWord;
+                            }
                             break;
 
-                        //MOV DX, [imm16]
+                        //MOV DX, m16
                         case 0x16:
-                            MAR = ReadWord();
-                            TempWord = ReadWord(MAR);
-                            EDX = EDX & (0xFFFF0000) | TempWord;
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadWord();
+                                TempWord = ReadWord(MAR);
+                                EDX = EDX & (0xFFFF0000) | TempWord;
+                            }
+                            //MOV EDX, m16
+                            else
+                            {
+                                MAR = ReadWord();
+                                TempDword = ReadDword(MAR);
+                                EDX = TempDword;
+                            }
                             break;
 
-                        //MOV BX, [imm32]
-                        case 0x1D:
-                            MAR = ReadDword();
-                            TempWord = ReadWord(MAR);
-                            EBX = EBX & (0xFFFF0000) | TempWord;
+                        //MOV EBX, m32
+                        case 0x1B:
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadDword();
+                                TempDword = ReadDword(MAR);
+                                EBX = TempDword;
+                            }
+                            //MOV BX, m32
+                            else
+                            {
+                                MAR = ReadDword();
+                                TempWord = ReadWord(MAR);
+                                EBX = EBX & (0xFFFF0000) | TempWord;
+                            }
                             break;
 
-                        //MOV BX, [imm16]
+                        //MOV BX, m16
                         case 0x1E:
-                            MAR = ReadWord();
-                            TempWord = ReadWord(MAR);
-                            EBX = EBX & (0xFFFF0000) | TempWord;
+                            if (PIR != 0x66)
+                            {
+                                MAR = ReadWord();
+                                TempWord = ReadWord(MAR);
+                                EBX = EBX & (0xFFFF0000) | TempWord;
+                            }
+                            //MOV EBX, m16
+                            else
+                            {
+                                MAR = ReadWord();
+                                TempDword = ReadDword(MAR);
+                                EBX = TempDword;
+                            }
                             break;
                     }
                     break;
+
+                #endregion
 
                 //NOP
                 case 0x90:
                     Thread.Sleep(500);
                     break;
 
-                //MOV AL, [imm16]/[imm32]
+                //MOV AL, m16/m32
                 case 0xA0:
+                    //MOV AL, m16
                     if (ExecutionMode == Mode.Bits16)
                     {
                         MAR = ReadWord();
                     }
+                    //MOV AL, m32
                     else
                     {
                         MAR = ReadDword();
@@ -515,23 +585,45 @@ namespace Sharp386
                     EAX = EAX & (0xFFFFFF00) | TempByte;
                     break;
 
-                //MOV AX, [imm16]
+                //MOV AX/EAX, m16/m32
                 case 0xA1:
-                    if (PIR != 0x66)
+                    if (ExecutionMode == Mode.Bits16)
                     {
-                        MAR = ReadWord();
-                        TempWord = ReadWord(MAR);
-                        EAX = EAX & (0xFFFF0000) | TempWord;
+                        //MOV AX, m16
+                        if (PIR != 0x66)
+                        {
+                            MAR = ReadWord();
+                            TempWord = ReadWord(MAR);
+                            EAX = EAX & (0xFFFF0000) | TempWord;
+                        }
+                        //MOV EAX, m16
+                        else
+                        {
+                            MAR = ReadWord();
+                            TempDword = ReadDword(MAR);
+                            EAX = TempDword;
+                        }
                     }
-                    //MOV AX, [imm32]
                     else
                     {
-                        MAR = ReadDword();
-                        TempWord = ReadWord(MAR);
-                        EAX = EAX & (0xFFFF0000) | TempWord;
+                        //MOV EAX, m32
+                        if (PIR != 0x66)
+                        {
+                            MAR = ReadDword();
+                            TempDword = ReadDword(MAR);
+                            EAX = EAX & (0xFFFF0000) | TempDword;
+                        }
+                        //MOV AX, m32
+                        else
+                        {
+                            MAR = ReadDword();
+                            TempWord = ReadWord(MAR);
+                            EAX = TempDword;
+                        }
                     }
-
                     break;
+
+                #region "MOV r8, imm8"
 
                 //MOV AL, imm8
                 case 0xB0:
@@ -572,6 +664,10 @@ namespace Sharp386
                 case 0xB7:
                     EBX = EBX & (0xFFFF00FF) | (UInt16)(ReadByte() << 8);
                     break;
+
+                #endregion
+
+                #region "MOV r16/r32, imm16/imm32"
 
                 //MOV AX/EAX, imm16/imm32
                 case 0xB8:
@@ -693,6 +789,8 @@ namespace Sharp386
                     }
                     break;
 
+                #endregion
+
                 //JMP rel8
                 case 0xEB:
                     EIP = (EIP + ReadByte() + 1) % 256;
@@ -709,13 +807,13 @@ namespace Sharp386
 
                     switch (TempByte)
                     {
-                        //INC byte [imm32]
+                        //INC byte m32
                         case 0x05:
                             MAR = ReadDword();
                             RAM[MAR]++;
                             break;
 
-                        //INC byte [imm16]
+                        //INC byte m16
                         case 0x06:
                             MAR = ReadWord();
                             RAM[MAR]++;
@@ -789,7 +887,7 @@ namespace Sharp386
 
                     switch (TempByte)
                     {
-                        //INC dword [imm32]
+                        //INC dword m32
                         case 0x05:
                             if (PIR != 0x66)
                             {
@@ -798,7 +896,7 @@ namespace Sharp386
                                 TempDword++;
                                 WriteDword(MAR, TempDword);
                             }
-                            //INC word [imm32]
+                            //INC word m32
                             else
                             {
                                 MAR = ReadDword();
@@ -808,7 +906,7 @@ namespace Sharp386
                             }
                             break;
 
-                        //INC word [imm16]
+                        //INC word m16
                         case 0x06:
                             if (PIR != 0x66)
                             {
@@ -817,7 +915,7 @@ namespace Sharp386
                                 TempWord++;
                                 WriteWord(MAR, TempWord);
                             }
-                            //INC dword [imm16]
+                            //INC dword m16
                             else
                             {
                                 MAR = ReadWord();
