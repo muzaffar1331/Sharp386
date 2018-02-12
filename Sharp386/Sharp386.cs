@@ -204,6 +204,8 @@ namespace Sharp386
 
             switch (CIR)
             {
+                #region "INC r16/r32"
+
                 //INC EAX
                 case 0x40:
                     if (ExecutionMode == Mode.Bits16)
@@ -340,8 +342,64 @@ namespace Sharp386
                     }
                     break;
 
+                #endregion
+
                 //OPSIZE:
                 case 0x66:
+                    break;
+
+                //MOV AL, r8
+                case 0x88:
+                    switch(ReadByte())
+                    {
+                        //MOV AL, AL
+                        case 0xC0:
+                            TempByte = (byte)(EAX & 0x000000FF);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, CL
+                        case 0xC8:
+                            TempByte = (byte)(ECX & 0x000000FF);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, DL
+                        case 0xD0:
+                            TempByte = (byte)(EDX & 0x000000FF);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, BL
+                        case 0xD8:
+                            TempByte = (byte)(EBX & 0x000000FF);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, AH
+                        case 0xE0:
+                            TempByte = (byte)((EAX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, CH
+                        case 0xE8:
+                            TempByte = (byte)((ECX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, DH
+                        case 0xF0:
+                            TempByte = (byte)((EDX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AL, BH
+                        case 0xF8:
+                            TempByte = (byte)((EBX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+                    }
                     break;
 
                 #region "MOV r8, m16/m32
@@ -819,6 +877,8 @@ namespace Sharp386
                             RAM[MAR]++;
                             break;
 
+                        #region "INC r8"
+
                         //INC AL
                         case 0xC0:
                             TempByte = (byte)(EAX & 0x000000FF);
@@ -878,6 +938,9 @@ namespace Sharp386
                             TempWord = (UInt16)(TempByte << 8);
                             EBX = EBX & (0xFFFF00FF) | TempWord;
                             break;
+
+                            #endregion
+
                     }
                     break;
 
