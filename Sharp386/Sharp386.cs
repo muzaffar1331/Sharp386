@@ -348,14 +348,20 @@ namespace Sharp386
                 case 0x66:
                     break;
 
-                //MOV AL, r8
+                //MOV AL/AH, r8
                 case 0x88:
-                    switch(ReadByte())
+                    switch (ReadByte())
                     {
                         //MOV AL, AL
                         case 0xC0:
                             TempByte = (byte)(EAX & 0x000000FF);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AH, AL
+                        case 0xC4:
+                            TempByte = (byte)(EAX & 0x000000FF);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
                         //MOV AL, CL
@@ -364,10 +370,22 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV AH, CL
+                        case 0xCC:
+                            TempByte = (byte)(ECX & 0x000000FF);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+
                         //MOV AL, DL
                         case 0xD0:
                             TempByte = (byte)(EDX & 0x000000FF);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AH, DL
+                        case 0xD4:
+                            TempByte = (byte)(EDX & 0x000000FF);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
                         //MOV AL, BL
@@ -376,10 +394,22 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV AH, BL
+                        case 0xDC:
+                            TempByte = (byte)(EBX & 0x000000FF);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+
                         //MOV AL, AH
                         case 0xE0:
                             TempByte = (byte)((EAX & 0x0000FF00) >> 8);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AH, AH
+                        case 0xE4:
+                            TempByte = (byte)((EAX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
                         //MOV AL, CH
@@ -388,16 +418,34 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV AH, CH
+                        case 0xEC:
+                            TempByte = (byte)((ECX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+
                         //MOV AL, DH
                         case 0xF0:
                             TempByte = (byte)((EDX & 0x0000FF00) >> 8);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV AH, DH
+                        case 0xF4:
+                            TempByte = (byte)((EDX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+
                         //MOV AL, BH
                         case 0xF8:
                             TempByte = (byte)((EBX & 0x0000FF00) >> 8);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV AH, BH
+                        case 0xFC:
+                            TempByte = (byte)((EBX & 0x0000FF00) >> 8);
+                            EAX = EAX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
                     }
                     break;
