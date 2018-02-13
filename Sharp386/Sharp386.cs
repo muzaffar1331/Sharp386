@@ -358,6 +358,12 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV BL, AL
+                        case 0xC3:
+                            TempByte = (byte)(EAX & 0x000000FF);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
+                            break;
+
                         //MOV AH, AL
                         case 0xC4:
                             TempByte = (byte)(EAX & 0x000000FF);
@@ -368,6 +374,12 @@ namespace Sharp386
                         case 0xC8:
                             TempByte = (byte)(ECX & 0x000000FF);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV BL, CL
+                        case 0xCB:
+                            TempByte = (byte)(ECX & 0x000000FF);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
                         //MOV AH, CL
@@ -382,6 +394,12 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV BL, DL
+                        case 0xD3:
+                            TempByte = (byte)(EDX & 0x000000FF);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
+                            break;
+
                         //MOV AH, DL
                         case 0xD4:
                             TempByte = (byte)(EDX & 0x000000FF);
@@ -392,6 +410,12 @@ namespace Sharp386
                         case 0xD8:
                             TempByte = (byte)(EBX & 0x000000FF);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV BL, BL
+                        case 0xDB:
+                            TempByte = (byte)(EBX & 0x000000FF);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
                         //MOV AH, BL
@@ -406,6 +430,12 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV BL, AH
+                        case 0xE3:
+                            TempByte = (byte)((EAX & 0x0000FF00) >> 8);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
+                            break;
+
                         //MOV AH, AH
                         case 0xE4:
                             TempByte = (byte)((EAX & 0x0000FF00) >> 8);
@@ -416,6 +446,12 @@ namespace Sharp386
                         case 0xE8:
                             TempByte = (byte)((ECX & 0x0000FF00) >> 8);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV BL, CH
+                        case 0xEB:
+                            TempByte = (byte)((ECX & 0x0000FF00) >> 8);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
                         //MOV AH, CH
@@ -430,6 +466,12 @@ namespace Sharp386
                             EAX = EAX & (0xFFFFFF00) | TempByte;
                             break;
 
+                        //MOV BL, DH
+                        case 0xF3:
+                            TempByte = (byte)((EDX & 0x0000FF00) >> 8);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
+                            break;
+
                         //MOV AH, DH
                         case 0xF4:
                             TempByte = (byte)((EDX & 0x0000FF00) >> 8);
@@ -440,6 +482,12 @@ namespace Sharp386
                         case 0xF8:
                             TempByte = (byte)((EBX & 0x0000FF00) >> 8);
                             EAX = EAX & (0xFFFFFF00) | TempByte;
+                            break;
+
+                        //MOV BL, BH
+                        case 0xFB:
+                            TempByte = (byte)((EBX & 0x0000FF00) >> 8);
+                            EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
                         //MOV AH, BH
