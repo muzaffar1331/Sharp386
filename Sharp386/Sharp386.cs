@@ -752,9 +752,19 @@ namespace Sharp386
                             EAX = TempDword;
                             break;
 
+                        //MOV BX, AX
+                        case 0xC3:
+                            EBX = EAX;
+                            break;
+
                         //MOV AX, CX
                         case 0xC8:
                             EAX = ECX;
+                            break;
+
+                        //MOV BX, CX
+                        case 0xCB:
+                            EBX = ECX;
                             break;
 
                         //MOV AX, DX
@@ -762,9 +772,20 @@ namespace Sharp386
                             EAX = EDX;
                             break;
 
+                        //MOV BX, DX
+                        case 0xD3:
+                            EBX = EDX;
+                            break;
+
                         //MOV AX, BX
                         case 0xD8:
                             EAX = EBX;
+                            break;
+
+                        //MOV BX, BX
+                        case 0xDB:
+                            TempDword = EBX;
+                            EBX = TempDword;
                             break;
 
                         //MOV AX, SP
@@ -772,9 +793,19 @@ namespace Sharp386
                             EAX = ESP;
                             break;
 
+                        //MOV BX, SP
+                        case 0xE3:
+                            EBX = ESP;
+                            break;
+
                         //MOV AX, BP
                         case 0xE8:
                             EAX = EBP;
+                            break;
+
+                        //MOV BX, BP
+                        case 0xEB:
+                            EBX = EBP;
                             break;
 
                         //MOV AX, SI
@@ -782,9 +813,19 @@ namespace Sharp386
                             EAX = ESI;
                             break;
 
+                        //MOV BX, SI
+                        case 0xF3:
+                            EBX = ESI;
+                            break;
+
                         //MOV AX, DI
                         case 0xF8:
                             EAX = EDI;
+                            break;
+
+                        //MOV BX, DI
+                        case 0xFB:
+                            EBX = EDI;
                             break;
                     }
                     break;
