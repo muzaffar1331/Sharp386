@@ -348,7 +348,9 @@ namespace Sharp386
                 case 0x66:
                     break;
 
-                //MOV AL/AH, r8
+                #region "MOV r8, r8"
+
+                //MOV r8, r8
                 case 0x88:
                     switch (ReadByte())
                     {
@@ -712,12 +714,6 @@ namespace Sharp386
                             EBX = EBX & (0xFFFFFF00) | TempByte;
                             break;
 
-                        //MOV DH, BH
-                        case 0xFE:
-                            TempByte = (byte)((EBX & 0x0000FF00) >> 8);
-                            EDX = EDX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
-                            break;
-
                         //MOV AH, BH
                         case 0xFC:
                             TempByte = (byte)((EBX & 0x0000FF00) >> 8);
@@ -730,10 +726,65 @@ namespace Sharp386
                             ECX = ECX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
 
+                        //MOV DH, BH
+                        case 0xFE:
+                            TempByte = (byte)((EBX & 0x0000FF00) >> 8);
+                            EDX = EDX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+
                         //MOV BH, BH
                         case 0xFF:
                             TempByte = (byte)((EBX & 0x0000FF00) >> 8);
                             EBX = EBX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
+                            break;
+                    }
+                    break;
+
+                #endregion
+
+                //MOV r16/r32, r16/r32
+                case 0x89:
+                    switch (ReadByte())
+                    {
+                        //MOV AX, AX
+                        case 0xC0:
+                            TempDword = EAX;
+                            EAX = TempDword;
+                            break;
+
+                        //MOV AX, CX
+                        case 0xC8:
+                            EAX = ECX;
+                            break;
+
+                        //MOV AX, DX
+                        case 0xD0:
+                            EAX = EDX;
+                            break;
+
+                        //MOV AX, BX
+                        case 0xD8:
+                            EAX = EBX;
+                            break;
+
+                        //MOV AX, SP
+                        case 0xE0:                            
+                            EAX = ESP;
+                            break;
+
+                        //MOV AX, BP
+                        case 0xE8:
+                            EAX = EBP;
+                            break;
+
+                        //MOV AX, SI
+                        case 0xF0:
+                            EAX = ESI;
+                            break;
+
+                        //MOV AX, DI
+                        case 0xF8:
+                            EAX = EDI;
                             break;
                     }
                     break;
