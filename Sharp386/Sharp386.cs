@@ -742,6 +742,8 @@ namespace Sharp386
 
                 #endregion
 
+                #region "MOV r16/r32, r16/r32"
+
                 //MOV r16/r32, r16/r32
                 case 0x89:
                     switch (ReadByte())
@@ -755,6 +757,11 @@ namespace Sharp386
                         //MOV CX, AX
                         case 0xC1:
                             ECX = EAX;
+                            break;
+
+                        //MOV DX, AX
+                        case 0xC2:
+                            EDX = EAX;
                             break;
 
                         //MOV BX, AX
@@ -773,6 +780,11 @@ namespace Sharp386
                             ECX = TempDword;
                             break;
 
+                        //MOV DX, CX
+                        case 0xCA:
+                            EDX = ECX;
+                            break;
+
                         //MOV BX, CX
                         case 0xCB:
                             EBX = ECX;
@@ -788,6 +800,12 @@ namespace Sharp386
                             ECX = EDX;
                             break;
 
+                        //MOV DX, DX
+                        case 0xD2:
+                            TempDword = EDX;
+                            EDX = TempDword;
+                            break;
+
                         //MOV BX, DX
                         case 0xD3:
                             EBX = EDX;
@@ -801,6 +819,11 @@ namespace Sharp386
                         //MOV CX, BX
                         case 0xD9:
                             ECX = EBX;
+                            break;
+
+                        //MOV DX, BX
+                        case 0xDA:
+                            EDX = EBX;
                             break;
 
                         //MOV BX, BX
@@ -819,6 +842,11 @@ namespace Sharp386
                             ECX = ESP;
                             break;
 
+                        //MOV DX, SP
+                        case 0xE2:
+                            EDX = ESP;
+                            break;
+
                         //MOV BX, SP
                         case 0xE3:
                             EBX = ESP;
@@ -832,6 +860,11 @@ namespace Sharp386
                         //MOV CX, BP
                         case 0xE9:
                             ECX = EBP;
+                            break;
+
+                        //MOV DX, BP
+                        case 0xEA:
+                            EDX = EBP;
                             break;
 
                         //MOV BX, BP
@@ -849,6 +882,11 @@ namespace Sharp386
                             ECX = ESI;
                             break;
 
+                        //MOV DX, SI
+                        case 0xF2:
+                            EDX = ESI;
+                            break;
+
                         //MOV BX, SI
                         case 0xF3:
                             EBX = ESI;
@@ -864,12 +902,19 @@ namespace Sharp386
                             ECX = EDI;
                             break;
 
+                        //MOV DX, DI
+                        case 0xFA:
+                            EDX = EDI;
+                            break;
+
                         //MOV BX, DI
                         case 0xFB:
                             EBX = EDI;
                             break;
                     }
                     break;
+
+                #endregion
 
                 #region "MOV r8, m16/m32
 
