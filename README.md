@@ -8,7 +8,7 @@ Current plans include implementing mostly used opcodes like MOV, ADD, SUB, INC, 
 The following instructions have been implemented, and are working in both 16-bit and 32-bit mode.
 
 MOV r8, r8  
-MOV r16, r16
+MOV r16/r32, r16/r32
 
 MOV r8, imm8/m16/m32  
 MOV r16, imm16/m16/m32  
