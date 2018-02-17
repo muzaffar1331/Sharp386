@@ -10,9 +10,15 @@ The following instructions have been implemented, and are working in both 16-bit
 MOV r8, r8  
 MOV r16/r32, r16/r32
 
-MOV r8, imm8/m16/m32  
-MOV r16, imm16/m16/m32  
-MOV r32, imm32/m16/m32  
+MOV r8, imm8  
+MOV r16, imm16  
+MOV r32, imm32  
+
+MOV r8, m16/m32  
+MOV r16, m16/m32  
+MOV r32, m16/m32  
+
+MOV byte m16/m32, r8  
 
 INC r8  
 INC r16  
