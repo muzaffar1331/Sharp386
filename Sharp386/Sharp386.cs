@@ -348,12 +348,113 @@ namespace Sharp386
                 case 0x66:
                     break;
 
-                #region "MOV r8, r8"
-
-                //MOV r8, r8
                 case 0x88:
                     switch (ReadByte())
                     {
+                        #region "MOV byte m16/m32, r8"
+
+                        //MOV byte m32, CL
+                        case 0x0D:
+                            MAR = ReadDword();
+                            TempByte = (byte)(ECX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, CL
+                        case 0x0E:
+                            MAR = ReadWord();
+                            TempByte = (byte)(ECX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, DL
+                        case 0x15:
+                            MAR = ReadDword();
+                            TempByte = (byte)(EDX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, DL
+                        case 0x16:
+                            MAR = ReadWord();
+                            TempByte = (byte)(EDX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, BL
+                        case 0x1D:
+                            MAR = ReadDword();
+                            TempByte = (byte)(EBX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, BL
+                        case 0x1E:
+                            MAR = ReadWord();
+                            TempByte = (byte)(EBX & (0x000000FF));
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, AH
+                        case 0x25:
+                            MAR = ReadDword();
+                            TempByte = (byte)((EAX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, AH
+                        case 0x26:
+                            MAR = ReadWord();
+                            TempByte = (byte)((EAX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, CH
+                        case 0x2D:
+                            MAR = ReadDword();
+                            TempByte = (byte)((ECX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, CH
+                        case 0x2E:
+                            MAR = ReadWord();
+                            TempByte = (byte)((ECX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, DH
+                        case 0x35:
+                            MAR = ReadDword();
+                            TempByte = (byte)((EDX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, DH
+                        case 0x36:
+                            MAR = ReadWord();
+                            TempByte = (byte)((EDX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m32, BH
+                        case 0x3D:
+                            MAR = ReadDword();
+                            TempByte = (byte)((EBX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        //MOV byte m16, BH
+                        case 0x3E:
+                            MAR = ReadWord();
+                            TempByte = (byte)((EBX & (0x0000FF00)) >> 8);
+                            WriteByte(MAR, TempByte);
+                            break;
+
+                        #endregion
+
+                        #region "MOV r8, r8"
+
                         //MOV AL, AL
                         case 0xC0:
                             TempByte = (byte)(EAX & 0x000000FF);
@@ -737,10 +838,10 @@ namespace Sharp386
                             TempByte = (byte)((EBX & 0x0000FF00) >> 8);
                             EBX = EBX & (0xFFFF00FF) | (UInt16)(TempByte << 8);
                             break;
+
+                            #endregion
                     }
                     break;
-
-                #endregion
 
                 #region "MOV r16/r32, r16/r32"
 
@@ -833,7 +934,7 @@ namespace Sharp386
                             break;
 
                         //MOV AX, SP
-                        case 0xE0:                            
+                        case 0xE0:
                             EAX = ESP;
                             break;
 
@@ -1192,6 +1293,23 @@ namespace Sharp386
                             TempWord = ReadWord(MAR);
                             EAX = TempDword;
                         }
+                    }
+                    break;
+
+                //MOV byte m16, AL
+                case 0xA2:
+                    if(ExecutionMode == Mode.Bits16)
+                    {
+                        MAR = ReadWord();
+                        TempByte = (byte)(EAX & (0x000000FF));
+                        WriteByte(MAR, TempByte);
+                    }
+                    //MOV byte m32, AL
+                    else
+                    {
+                        MAR = ReadDword();
+                        TempByte = (byte)(EAX & (0x000000FF));
+                        WriteByte(MAR, TempByte);
                     }
                     break;
 
